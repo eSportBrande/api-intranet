@@ -14,3 +14,8 @@ Modify the `.env` file to set up your environment variables. You can use the `.e
 
 ### Azure Function specfic setup
 1. `CORS_ALLOWED_ORIGINS` is a comma-separated list of allowed origins. For example: `["https://url1.com", "https://url2.com"]`
+
+### Ny version?
+For at lave en ny version skal du pull fra main, lave rettelser og push til main, samt lave et git tag.
+- `git tag -a v1.0.0 -m "Version 1.0.0"` (ændre versionen)
+- `git push origin v1.0.0` (push til origin)
