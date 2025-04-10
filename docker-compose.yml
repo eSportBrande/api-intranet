@@ -2,16 +2,13 @@ version: '3.8'
 
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/esportbrande/api-intranet:sha-9735b64
     ports:
       - "7071:80"
     environment:
       - AzureWebJobsScriptRoot=/home/site/wwwroot
       - AzureFunctionsJobHost__Logging__Console__IsEnabled=true
-      env_file:
-        - .env
+    env_file:
+      - .env
     volumes:
-      - ./:/home/site/wwwroot
-      - ./host_secrets.json:/etc/secrets/host.json
+      - ./host_secrets.json:/etc/secrets/host.json:ro
