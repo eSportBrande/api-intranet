@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "7071:80"
+    environment:
+      - AzureWebJobsScriptRoot=/home/site/wwwroot
+      - AzureFunctionsJobHost__Logging__Console__IsEnabled=true
+      env_file:
+        - .env
+    volumes:
+      - ./:/home/site/wwwroot
+      - ./host_secrets.json:/etc/secrets/host.json

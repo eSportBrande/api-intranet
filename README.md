@@ -1,2 +1,2 @@
-# api-intranet
-Intranet API for eSport Brande
+# intranet-api
+API for eSport Brande Intranet page.
