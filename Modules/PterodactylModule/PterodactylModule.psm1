@@ -24,7 +24,6 @@ function Get-PterodactylServers {
         # Extract server information and build the list
         foreach ($server in $($servers.attributes | Where-Object {$_.name -match "$($ServerNamePrefix)" -and $_.name -notin $ExcludedServers})) {
             $serverObj = New-Object psobject
-            Write-Host "Hej"
             $serverObj | Add-Member -MemberType NoteProperty -Name "ServerName" -Value "$($server.name)"
             $serverObj | Add-Member -MemberType NoteProperty -Name "ServerID" -Value "$($server.identifier)"
         

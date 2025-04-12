@@ -13,11 +13,13 @@ $objList = @()
 # Pterodactyl API configuration
 $pterodactylApiUrl = "$($env:pterodactylApiUrl)"
 $apiKey = "$($env:pterodactylApikey)"
-$CSPublicIPPrefix = "$($env:CSPublicIPPrefix)"
+$CSPublicIPPrefix = "$($env:MCPublicIPPrefix)"
+$ExcludedServers = "$($env:MCExcludedServers)"
+$ExcludedServers = $ExcludedServers -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ -ne "" }
 
 # Get the server data from the Pterodactyl API using our module
 Write-Host "Fetching server data from Pterodactyl API..."
-$ServerData = Get-PterodactylServers -PterodactylApiUrl $pterodactylApiUrl -ApiKey $apiKey -ServerNamePrefix "MC-"
+$ServerData = Get-PterodactylServers -PterodactylApiUrl $pterodactylApiUrl -ApiKey $apiKey -ServerNamePrefix "MC-" -ExcludedServers $ExcludedServers
 Write-Host "Server data fetched successfully."
 
 Write-Output "$ServerData"
