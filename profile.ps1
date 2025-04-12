@@ -16,3 +16,17 @@
 # Enable-AzureRmAlias
 
 # You can also define functions or aliases that can be referenced in any of your PowerShell functions.
+
+# Load custom modules from the Modules directory
+$modulesPath = Join-Path $PSScriptRoot "Modules"
+if (Test-Path $modulesPath) {
+    # Load all modules in the Modules directory
+    Get-ChildItem -Path $modulesPath -Directory | ForEach-Object {
+        $moduleName = $_.Name
+        $modulePath = Join-Path $_.FullName "$moduleName.psm1"
+        if (Test-Path $modulePath) {
+            Write-Host "Loading module: $moduleName from $modulePath"
+            Import-Module $modulePath -Force
+        }
+    }
+}

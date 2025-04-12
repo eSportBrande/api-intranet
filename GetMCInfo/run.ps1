@@ -4,7 +4,7 @@ using namespace System.Net
 param($Request, $TriggerMetadata)
 
 # Import the custom module
-Import-Module "$(Split-Path $PSScriptRoot -Parent)/Modules/CSModule/CSModule.psm1" -Force
+Import-Module "$(Split-Path $PSScriptRoot -Parent)/Modules/MCModule/MCModule.psm1" -Force
 Import-Module "$(Split-Path $PSScriptRoot -Parent)/Modules/PterodactylModule/PterodactylModule.psm1" -Force
 
 # Write to the Azure Functions log stream.
@@ -17,13 +17,14 @@ $CSPublicIPPrefix = "$($env:CSPublicIPPrefix)"
 
 # Get the server data from the Pterodactyl API using our module
 Write-Host "Fetching server data from Pterodactyl API..."
-$ServerData = Get-PterodactylServers -PterodactylApiUrl $pterodactylApiUrl -ApiKey $apiKey -ServerNamePrefix "CS2-"
+$ServerData = Get-PterodactylServers -PterodactylApiUrl $pterodactylApiUrl -ApiKey $apiKey -ServerNamePrefix "MC-"
 Write-Host "Server data fetched successfully."
 
 Write-Output "$ServerData"
 foreach ($server in $ServerData) {
     # Get detailed server information using our module function
-    $serverDetails = Get-CSServerDetails -Server $server -PublicIPPrefix $CSPublicIPPrefix -CSGamePassword $env:CSGamePassword
+    Write-Host $server.Port
+    $serverDetails = Get-MCServerDetails -server $server -PublicIPPrefix $CSPublicIPPrefix
     $objList += $serverDetails
 }
 
