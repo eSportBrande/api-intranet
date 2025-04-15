@@ -23,7 +23,7 @@ Write-Host "Server data fetched successfully."
 Write-Output "$ServerData"
 foreach ($server in $ServerData) {
     # Get detailed server information using our module function
-    $serverDetails = Get-CSServerDetails -Server $server -PublicIPPrefix $CSPublicIPPrefix -CSGamePassword $env:CSGamePassword
+    $serverDetails = Get-CSTVServerDetails -Server $server -PublicIPPrefix $CSPublicIPPrefix -CSGamePassword $env:CSGamePassword
     $objList += $serverDetails
 }
 
