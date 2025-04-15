@@ -162,7 +162,6 @@ function Get-CSTVServerDetails {
         $obj | Add-Member -MemberType NoteProperty -Name "ServerName" -Value "$($Name)"
         $obj | Add-Member -MemberType NoteProperty -Name "Online" -Value $Online
         $obj | Add-Member -MemberType NoteProperty -Name "IP" -Value "$($server.IP):$($server.CSTVPort)"
-        $obj | Add-Member -MemberType NoteProperty -Name "Public" -Value $($server.Public)
         $obj | Add-Member -MemberType NoteProperty -Name "LocalConnect" -Value "$($LocalConnect)"
         $obj | Add-Member -MemberType NoteProperty -Name "PasswordProtected" -Value $($PasswordProtected)
         $obj | Add-Member -MemberType NoteProperty -Name "Password" -Value "$($Password)"

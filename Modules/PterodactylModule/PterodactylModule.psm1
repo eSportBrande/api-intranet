@@ -46,8 +46,8 @@ function Get-PterodactylServers {
             }
 
             if ($server.relationships.allocations.data[1].attributes.notes -match "CSTV") {
-                # Notes might be "Public-PORTNUMBER" getting the portnumber
-                $PublicPort = $server.relationships.allocations.data[1].attributes.notes -replace "CSTV-", ""
+                # Notes might be "CSTV-PORTNUMBER" getting the portnumber
+                $CSTVPort = $server.relationships.allocations.data[1].attributes.notes -replace "CSTV-", ""
                 $serverObj | Add-Member -MemberType NoteProperty -Name "CSTV" -Value $true
                 $serverObj | Add-Member -MemberType NoteProperty -Name "CSTVPort" -Value "$($CSTVPort)"
             }
