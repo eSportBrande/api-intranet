@@ -27,7 +27,18 @@ foreach ($server in $ServerData) {
     $objList += $serverDetails
 }
 
-$jsonObj = $objList | ConvertTo-Json
+# Sort the servers: CS2-WAR first, CS2-NADE second, then everything else
+$sortedObjList = $objList | Sort-Object -Property @{
+    Expression = {
+        switch -Regex ($_.ServerName) {
+            'CS2-WAR' { 0 }
+            'CS2-NADE' { 1 }
+            default { 2 }
+        }
+    }
+}
+
+$jsonObj = $sortedObjList | ConvertTo-Json
 
 # Associate values to output bindings by calling 'Push-OutputBinding'.
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
