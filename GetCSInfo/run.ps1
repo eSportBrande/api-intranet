@@ -32,8 +32,9 @@ $sortedObjList = $objList | Sort-Object -Property @{
     Expression = {
         switch -Regex ($_.ServerName) {
             'CS2-WAR' { 0 }
-            'CS2-NADE' { 1 }
-            default { 2 }
+            'eBot ::' { 1 }
+            'CS2-NADE' { 2 }
+            default { 3 }
         }
     }
 }
