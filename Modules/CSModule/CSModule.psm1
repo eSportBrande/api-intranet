@@ -90,6 +90,7 @@ function Get-CSServerDetails {
     }
 
     # Build the server object
+    $obj | Add-Member -MemberType NoteProperty -Name "OriginalServerName" -Value "$($server.ServerName)"
     $obj | Add-Member -MemberType NoteProperty -Name "ServerName" -Value "$($Name)"
     $obj | Add-Member -MemberType NoteProperty -Name "Map" -Value "$($Query.Map)"
     $obj | Add-Member -MemberType NoteProperty -Name "Online" -Value $Online
@@ -99,8 +100,6 @@ function Get-CSServerDetails {
     $obj | Add-Member -MemberType NoteProperty -Name "Guide" -Value "$($GuideUrl)"
     $obj | Add-Member -MemberType NoteProperty -Name "ServerType" -Value "$($ServerType)"
     $obj | Add-Member -MemberType NoteProperty -Name "Public" -Value $($server.Public)
-    $obj | Add-Member -MemberType NoteProperty -Name "PublicPort" -Value "$($server.PublicPort)"
-    $obj | Add-Member -MemberType NoteProperty -Name "PublicIP" -Value "$($PublicIP)"
     $obj | Add-Member -MemberType NoteProperty -Name "LocalConnect" -Value "$($LocalConnect)"
     $obj | Add-Member -MemberType NoteProperty -Name "PublicConnect" -Value "$($PublicConnect)"
     $obj | Add-Member -MemberType NoteProperty -Name "PasswordProtected" -Value $($PasswordProtected)

@@ -30,11 +30,12 @@ foreach ($server in $ServerData) {
 # Sort the servers: CS2-WAR first, CS2-NADE second, then everything else
 $sortedObjList = $objList | Sort-Object -Property @{
     Expression = {
-        switch -Regex ($_.ServerName) {
+        switch -Regex ($_.OriginalServerName) {
             'CS2-WAR' { 0 }
-            'eBot ::' { 1 }
-            'CS2-NADE' { 2 }
-            default { 3 }
+            'CS2-NADE' { 1 }
+            'CS2-RETAKE' { 2 }
+            'CS2-PREFIRE' { 3 }
+            default { 2 }
         }
     }
 }
