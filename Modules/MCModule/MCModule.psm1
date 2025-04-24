@@ -157,9 +157,9 @@ function Get-MCServerDetails {
     $obj | Add-Member -MemberType NoteProperty -Name "IP" -Value "$($server.IP):$($server.Port)"
     #$obj | Add-Member -MemberType NoteProperty -Name "Map" -Value "Not Implemented"
     $obj | Add-Member -MemberType NoteProperty -Name "Version" -Value "$($Query.Version)"
-    $obj | Add-Member -MemberType NoteProperty -Name "Public" -Value "$($server.Public)"
+    $obj | Add-Member -MemberType NoteProperty -Name "Public" -Value $($server.Public)
     $obj | Add-Member -MemberType NoteProperty -Name "PublicPort" -Value "$($PublicPort)"
-    $obj | Add-Member -MemberType NoteProperty -Name "PublicIP" -Value "$($PublicIP)"
+    $obj | Add-Member -MemberType NoteProperty -Name "PublicConnect" -Value "$($PublicIP)"
 
     return $obj
 }
