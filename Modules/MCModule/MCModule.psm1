@@ -160,7 +160,7 @@ function Get-MCServerDetails {
     $obj | Add-Member -MemberType NoteProperty -Name "Public" -Value $($server.Public)
     $obj | Add-Member -MemberType NoteProperty -Name "PublicPort" -Value "$($PublicPort)"
     $obj | Add-Member -MemberType NoteProperty -Name "PublicConnect" -Value "$($PublicIP)"
-    $obj | Add-Member -MemberType NoteProperty -Name "Schedules" -Value $($server.Schedules)
+    $obj | Add-Member -MemberType NoteProperty -Name "Schedules" -Value "$($server.Schedules | ConvertTo-Json -Depth 5)"
 
     return $obj
 }

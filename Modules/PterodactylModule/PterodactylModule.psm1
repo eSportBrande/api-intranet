@@ -68,7 +68,7 @@ function Get-PterodactylServers {
                 }
             }
 
-            $serverObj | Add-Member -MemberType NoteProperty -Name "Schedule" -Value $ScheduleData
+            $serverObj | Add-Member -MemberType NoteProperty -Name "Schedules" -Value $ScheduleData
             $ServerData += $serverObj
         }
     }
