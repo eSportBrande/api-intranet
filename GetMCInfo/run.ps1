@@ -30,7 +30,7 @@ foreach ($server in $ServerData) {
     $objList += $serverDetails
 }
 
-$jsonObj = $objList | ConvertTo-Json
+$jsonObj = $objList | ConvertTo-Json -Depth 100
 
 # Associate values to output bindings by calling 'Push-OutputBinding'.
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
