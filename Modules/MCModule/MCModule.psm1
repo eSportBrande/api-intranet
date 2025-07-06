@@ -160,7 +160,16 @@ function Get-MCServerDetails {
     $obj | Add-Member -MemberType NoteProperty -Name "Public" -Value $($server.Public)
     $obj | Add-Member -MemberType NoteProperty -Name "PublicPort" -Value "$($PublicPort)"
     $obj | Add-Member -MemberType NoteProperty -Name "PublicConnect" -Value "$($PublicIP)"
-    $obj | Add-Member -MemberType NoteProperty -Name "Schedules" -Value $($server.Schedules)
+    # Convert each schedule object to a hashtable for proper JSON serialization
+    $convertedSchedules = @()
+    foreach ($sched in $server.Schedules) {
+        $convertedSchedules += @{
+            ScheduleName = $sched.ScheduleName
+            last_run_at = $sched.last_run_at
+            next_run_at = $sched.next_run_at
+        }
+    }
+    $obj | Add-Member -MemberType NoteProperty -Name "Schedules" -Value $convertedSchedules
 
     return $obj
 }
