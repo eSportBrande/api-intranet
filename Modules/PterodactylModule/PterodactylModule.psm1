@@ -20,9 +20,10 @@ function Get-PterodactylServers {
         
         # Initialize empty array for server data
         $ServerData = @()
-        
+
         # Extract server information and build the list
         foreach ($server in $($servers.attributes | Where-Object {$_.name -match "$($ServerNamePrefix)" -and $_.name -notin $ExcludedServers})) {
+            $Schedule = @()
             $serverObj = New-Object psobject
             $serverObj | Add-Member -MemberType NoteProperty -Name "ServerName" -Value "$($server.name)"
             $serverObj | Add-Member -MemberType NoteProperty -Name "ServerID" -Value "$($server.identifier)"
@@ -52,6 +53,19 @@ function Get-PterodactylServers {
                 $serverObj | Add-Member -MemberType NoteProperty -Name "CSTVPort" -Value "$($CSTVPort)"
             }
         
+            $schedulesUrl = "$PterodactylApiUrl/client/servers/$($server.identifier)/schedules"
+            $schedulesResponse = Invoke-RestMethod -Uri $schedulesUrl -Method GET -Headers $headers
+
+            foreach ($schedule in $schedulesResponse.data) {
+                if ($schedule.attributes.name -eq "PowerOn" -or $schedule.attributes.name -eq "PowerOff") {
+                    $ScheduleObj = New-Object psobject
+                    $ScheduleObj | Add-Member -MemberType NoteProperty -Name "ScheduleName" -Value $schedule.attributes.name
+                    $ScheduleObj | Add-Member -MemberType NoteProperty -Name "last_run_at" -Value $schedule.attributes.last_run_at
+                    $ScheduleObj | Add-Member -MemberType NoteProperty -Name "next_run_at" -Value $schedule.attributes.next_run_at
+                    $Schedule += $ScheduleObj
+                }
+                $serverObj | Add-Member -MemberType NoteProperty -Name "Schedule" -Value $Schedule
+            }
             $ServerData += $serverObj
         }
     }
