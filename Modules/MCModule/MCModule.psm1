@@ -163,7 +163,7 @@ function Get-MCServerDetails {
     # Convert each schedule object to a hashtable for proper JSON serialization
     $convertedSchedules = @()
     foreach ($sched in $server.Schedules) {
-        $convertedSchedules += @{
+        $convertedSchedules += [PSCustomObject]@{
             ScheduleName = $sched.ScheduleName
             last_run_at = $sched.last_run_at
             next_run_at = $sched.next_run_at
