@@ -78,5 +78,74 @@ function Get-PterodactylServers {
     return $ServerData
 }
 
+function Get-PterodactylServerId {
+    param (
+        [string]$PterodactylApiUrl,
+        [string]$ApiKey,
+        [string]$ServerID
+    )
+
+    # Set up the headers with authentication
+    $headers = @{
+        "Authorization" = "Bearer $apiKey"
+        "Accept" = "application/json"
+        "Content-Type" = "application/json"
+    }
+    
+    # Send the command to the server
+    try {
+        $response = Invoke-RestMethod -Uri "$PterodactylApiUrl/client/servers/$($ServerID)" -Method Get -Headers $headers -StatusCodeVariable responseStatus
+        
+        if ($responseStatus -eq 200) {
+            Write-Host "Server ID found: $($ServerID)"
+            return $response
+        }
+        else {
+            Write-Host "Server ID not found: $($ServerID)"
+            return $null
+        }
+
+    }
+    catch {
+        Write-Host "Failed to send command: $_"
+        return $null
+    }
+}
+
+function Send-PterodactylCommand {
+    param (
+        [string]$PterodactylApiUrl,
+        [string]$ApiKey,
+        [string]$ServerID,
+        [string]$Command
+    )
+
+    # Set up the headers with authentication
+    $headers = @{
+        "Authorization" = "Bearer $apiKey"
+        "Accept" = "application/json"
+        "Content-Type" = "application/json"
+    }
+
+    # Send the command to the server
+    try {
+        $response = Invoke-RestMethod -Uri "$PterodactylApiUrl/client/servers/$($ServerID)/command" -Method POST -StatusCodeVariable responseStatus -Headers $headers -Body (@{ "command" = $Command } | ConvertTo-Json)
+
+        Write-Host "Sender Response..."
+        Write-Host "Status: $($responseStatus)"
+        if ($responseStatus -eq 200 -or $responseStatus -eq 204) {
+            Write-Host "Command sent successfully: $($Command)"
+            return 204
+        }
+        else {
+            Write-Host "Failed to send command: $($Command)"
+            return $null
+        }
+    }
+    catch {
+        Write-Host "Failed to send command: $_"
+        return $null
+    }
+}
 # Export the functions
-Export-ModuleMember -Function Get-PterodactylServers
+Export-ModuleMember -Function Get-PterodactylServers, Get-PterodactylServerId, Send-PterodactylCommand
