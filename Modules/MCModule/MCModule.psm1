@@ -159,6 +159,7 @@ function Get-MCServerDetails {
     }
 
     $obj | Add-Member -MemberType NoteProperty -Name "ServerName" -Value "$($server.ServerName)"
+    $obj | Add-Member -MemberType NoteProperty -Name "ServerID" -Value "$($server.identifier)"
     $obj | Add-Member -MemberType NoteProperty -Name "Online" -Value "$($Online)"
     $obj | Add-Member -MemberType NoteProperty -Name "Players" -Value "$($Query.Players.Online) / $($Query.Players.Max)"
     $obj | Add-Member -MemberType NoteProperty -Name "IP" -Value "$($server.IP):$($server.Port)"
