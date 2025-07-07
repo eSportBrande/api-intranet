@@ -14,6 +14,9 @@ $pterodactylApiUrl = "$($env:pterodactylApiUrl)"
 
 $ActionMapping = @{
     "StartBuildBattle" = "list"
+    "SetDayTime" = "time set day"
+    "SetNightTime" = "time set night"
+    "WeatherClear" = "weather clear"
     "ping" = "say hello from API"
 }
 
