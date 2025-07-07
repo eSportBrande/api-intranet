@@ -92,7 +92,7 @@ function Get-CSServerDetails {
     # Build the server object
     $obj | Add-Member -MemberType NoteProperty -Name "OriginalServerName" -Value "$($server.ServerName)"
     $obj | Add-Member -MemberType NoteProperty -Name "ServerName" -Value "$($Name)"
-    $obj | Add-Member -MemberType NoteProperty -Name "ServerID" -Value "$($server.identifier)"
+    $obj | Add-Member -MemberType NoteProperty -Name "ServerID" -Value "$($server.ServerID)"
     $obj | Add-Member -MemberType NoteProperty -Name "Map" -Value "$($Query.Map)"
     $obj | Add-Member -MemberType NoteProperty -Name "Online" -Value $Online
     $obj | Add-Member -MemberType NoteProperty -Name "Players" -Value "$($Query.Players) / $($Query.Max_players)"
