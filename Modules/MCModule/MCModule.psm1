@@ -151,10 +151,18 @@ function Get-MCServerDetails {
         $PublicPort = "N/A"
     }
 
+    if ($server.ServerName -match "MC-Build-Battle") {
+        $GuideUrl = "$($env:GUIDE_BUILDBATTLE)"
+    }
+    else {
+        $GuideUrl = $null
+    }
+
     $obj | Add-Member -MemberType NoteProperty -Name "ServerName" -Value "$($server.ServerName)"
     $obj | Add-Member -MemberType NoteProperty -Name "Online" -Value "$($Online)"
     $obj | Add-Member -MemberType NoteProperty -Name "Players" -Value "$($Query.Players.Online) / $($Query.Players.Max)"
     $obj | Add-Member -MemberType NoteProperty -Name "IP" -Value "$($server.IP):$($server.Port)"
+    $obj | Add-Member -MemberType NoteProperty -Name "Guide" -Value "$($GuideUrl)"
     #$obj | Add-Member -MemberType NoteProperty -Name "Map" -Value "Not Implemented"
     $obj | Add-Member -MemberType NoteProperty -Name "Version" -Value "$($Query.Version)"
     $obj | Add-Member -MemberType NoteProperty -Name "Public" -Value $($server.Public)
