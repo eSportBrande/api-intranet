@@ -13,7 +13,7 @@ $apiKey = "$($env:pterodactylApikey)"
 $pterodactylApiUrl = "$($env:pterodactylApiUrl)"
 
 $ActionMapping = @{
-    "StartBuildBattle" = "list"
+    "StartBuildBattle" = "sudo * /bb join BB-Candyland"
     "SetDayTime" = "time set day"
     "SetNightTime" = "time set night"
     "WeatherClear" = "weather clear"
