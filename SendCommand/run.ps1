@@ -24,7 +24,7 @@ $ActionMapping = @{
 if (-not $ActionMapping.ContainsKey($Request.Body.action)) {
     $Body = @{
         status = "error"
-        message = "Invalid action requested. Action not found in allowed actions."
+        message = "Invalid action requested. Action not found in allowed actions. / Ugyldig handling anmodet. Handling ikke fundet i tilladte handlinger."
     }
     
     Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
@@ -52,7 +52,7 @@ if ($null -ne $Check.attributes) {
     if ($Send -eq 204) {
         $Body = @{
             status = "success"
-            message = "Command sent successfully."
+            message = "Minecraft responded succesfully on request / Minecraft svarede succesfuldt på requestet."
         }
         Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
             StatusCode = [HttpStatusCode]::OK
@@ -63,7 +63,7 @@ if ($null -ne $Check.attributes) {
     else {
         $Body = @{
             status = "error"
-            message = "Failed to send command."
+            message = "Ouch! Something went wrong while sending the command to the Minecraft server. / Ouch! Noget gik galt, mens kommandoen blev sendt til Minecraft-serveren."
         }
         Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
             StatusCode = [HttpStatusCode]::InternalServerError
@@ -77,7 +77,7 @@ else {
     Write-Host "Server ID does not exist"
     $Body = @{
         status = "error"
-        message = "Server ID does not exist."
+        message = "Server ID does not exist. / Server ID findes ikke."
     }
     
     Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
