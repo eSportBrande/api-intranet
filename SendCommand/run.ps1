@@ -126,6 +126,8 @@ if ($Request.Body.action -eq "StartBuildBattle") {
         })
         return
     }
+    $MappedCommand = $FullCommand
+    Write-Host "Mapped command for Build Battle: $($MappedCommand)"
 }
 else {
     # Lets map the command for other actions
