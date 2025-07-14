@@ -73,7 +73,7 @@ if ($Request.Body.action -eq "StartBuildBattle") {
         $BuildBattleType = "solo"
     }
     else {
-        if ($Request.Body.type -notin @('solo', 'gtb', 'team')) {
+        if ($Request.Body.type -notin @('solo', 'team')) {
             $Body = @{
                 status = "error"
                 message = "Invalid type. Allowed values are: solo, gtb, team. / Ugyldig type. Tilladte værdier er: solo, gtb, team."
@@ -91,18 +91,45 @@ if ($Request.Body.action -eq "StartBuildBattle") {
 
 # Making final command for Build Battle like this:
 # bba forceplay BB-Candyland <type> <theme>
+
     if ($BuildBattleTheme -eq $false) {
-        $mappedCommand = "bba forceplay BB-Candyland $($BuildBattleType)"
+        Write-Host "No theme selected, using default Build Battle command without theme."
+        if ($BuildBattleType -eq "team") {
+            Write-Host "Using team mode for Build Battle."
+            $FullCommand = "bba forceplay ESB-Team"
+        }
+        else {
+            Write-Host "Using solo mode for Build Battle."
+            $FullCommand = "bba forceplay ESB-Solo"
+        }
+    }
+    elseif ($BuildBattleTheme -is [string]) {
+        Write-Host "Using theme: $($BuildBattleTheme) for Build Battle."
+        if ($BuildBattleType -eq "team") {
+            Write-Host "Using team mode for Build Battle."
+            $FullCommand = "bba forceplay ESB-Team $($BuildBattleTheme)"
+        }
+        else {
+            Write-Host "Using solo mode for Build Battle."
+            $FullCommand = "bba forceplay ESB-Solo $($BuildBattleTheme)"
+        }
     }
     else {
-        $mappedCommand = "bba forceplay BB-Candyland $($BuildBattleType) $($BuildBattleTheme)"
+        Write-Host "Invalid theme or type provided for Build Battle."
+        $Body = @{
+            status = "error"
+            message = "Invalid theme or type provided for Build Battle. / Ugyldigt tema eller type angivet for Build Battle."
+        }
+        Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+            StatusCode = [HttpStatusCode]::BadRequest
+            Body = $Body
+        })
+        return
     }
-    Write-Host "Mapped command for Build Battle: $($mappedCommand)"
 }
 else {
     # Lets map the command for other actions
     $ActionMapping = @{
-        "StartBuildBattle" = "sudo * /bb join BB-Candyland"
         "SetDayTime" = "time set day"
         "SetNightTime" = "time set night"
         "WeatherClear" = "weather clear"
