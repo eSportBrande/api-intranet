@@ -10,6 +10,8 @@ $icalContent = Invoke-WebRequest -Uri $icalUrl -UseBasicParsing | Select-Object 
 # Split into lines
 $lines = $icalContent -split "`r?`n"
 
+$maxdays = $env:MaxEventDays -as [int]
+
 # Parse VEVENT blocks
 $events = @()
 $inEvent = $false
@@ -55,12 +57,27 @@ foreach ($line in $lines) {
         if ($event.ContainsKey('DESCRIPTION')) {
             $description = $event['DESCRIPTION']
         }
-        $events += [PSCustomObject]@{
-            Titel = $title
-            Start = $start
-            Slut = $end
-            URL = $url
-            Beskrivelse = $description
+        $addEvent = $true
+        if ($start -ne $null) {
+            $startDate = $null
+            try {
+                $startDate = [datetime]::ParseExact($start, "yyyy-MM-dd HH:mm:ss", $null)
+            } catch {
+                try { $startDate = [datetime]::ParseExact($start, "yyyy-MM-dd 00:00:00", $null) } catch { $startDate = $null }
+            }
+            if ($startDate -ne $null) {
+                $daysDiff = ($startDate - (Get-Date)).TotalDays
+                if ($daysDiff -gt $maxdays) { $addEvent = $false }
+            }
+        }
+        if ($addEvent) {
+            $events += [PSCustomObject]@{
+                Title = $title
+                Start = $start
+                End = $end
+                URL = $url
+                Description = $description
+            }
         }
         continue
     }
