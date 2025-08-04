@@ -95,7 +95,8 @@ function Get-CSServerDetails {
     $obj | Add-Member -MemberType NoteProperty -Name "ServerID" -Value "$($server.ServerID)"
     $obj | Add-Member -MemberType NoteProperty -Name "Map" -Value "$($Query.Map)"
     $obj | Add-Member -MemberType NoteProperty -Name "Online" -Value $Online
-    $obj | Add-Member -MemberType NoteProperty -Name "Players" -Value "$($Query.Players) / $($Query.Max_players)"
+    $obj | Add-Member -MemberType NoteProperty -Name "Players" -Value "$($Query.Players)"
+    $obj | Add-Member -MemberType NoteProperty -Name "MaxPlayers" -Value "$($Query.Max_players)"
     $obj | Add-Member -MemberType NoteProperty -Name "Version" -Value "$($Query.Version)"
     $obj | Add-Member -MemberType NoteProperty -Name "IP" -Value "$($server.IP):$($server.Port)"
     $obj | Add-Member -MemberType NoteProperty -Name "Guide" -Value "$($GuideUrl)"
