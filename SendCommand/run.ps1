@@ -36,7 +36,7 @@ $AllowedActions = @(
     "ping", 
     "teleport"
 )
-$RequestAction = $RequestAction.Trim()
+$RequestAction = $Request.Body.action.Trim()
 if ($AllowedActions -notcontains $RequestAction) {
     Write-Host "Invalid or missing action in request body."
     $Body = @{
