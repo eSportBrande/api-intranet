@@ -34,7 +34,8 @@ $AllowedActions = @(
     "SetNightTime", 
     "WeatherClear", 
     "ping", 
-    "teleport"
+    "teleport",
+    "give"
 )
 $RequestAction = $Request.Body.action.Trim()
 if ($AllowedActions -notcontains $RequestAction) {
@@ -170,6 +171,42 @@ elseif ($RequestAction -eq "teleport") {
         return
     }
 }
+
+elseif ($RequestAction -eq "give") {
+    if (-not $Request.Body.Item -or -not $Request.Body.To) {
+        Write-Host "No players or item specified for give action"
+        $Body = @{
+            status = "error"
+            message = "No players or item specified for give action. / Ingen spillere eller genstand angivet til give-handling."
+        }
+        Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+            StatusCode = [HttpStatusCode]::BadRequest
+            Body = $Body
+        })
+        return
+    }
+    if (($Request.Body.Item -is [string]) -and ($Request.Body.To -is [string]) -and ($Request.Body.Item -match '^[a-zA-Z0-9]+$') -and ($Request.Body.To -match '^[a-zA-Z0-9]+$')) {
+        Write-Host "Valid player name and item specified for give action."
+        $To = $Request.Body.To
+        $Item = $Request.Body.Item
+        # Construct the give command
+        $MappedCommand = "give $($To) $($Item)"
+        Write-Host "Mapped command for give action: $($MappedCommand)"
+    }
+    else {
+        Write-Host "Invalid player name or item provided for give action."
+        $Body = @{
+            status = "error"
+            message = "Invalid player name or item provided for give action. / Ugyldige spillernavne eller genstand angivet til give-handling."
+        }
+        Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+            StatusCode = [HttpStatusCode]::BadRequest
+            Body = $Body
+        })
+        return
+    }
+}
+
 else {
     # Lets map the command for other actions
     $ActionMapping = @{
