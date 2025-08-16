@@ -161,7 +161,7 @@ if ($Request.Body.action -eq "teleport") {
         return
     }
     # Construct the teleport command
-    $MappedCommand = "tp $($Frem) $($To)"
+    $MappedCommand = "tp $($From) $($To)"
     Write-Host "Mapped command for teleport action: $($MappedCommand)"
 }
 else {
