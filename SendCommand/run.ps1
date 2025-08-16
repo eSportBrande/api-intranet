@@ -28,19 +28,25 @@ if ($Request.Body.identifier -notmatch '^[a-zA-Z0-9]{8,16}$') {
 }
 
 # Action must be provided and must be valid: Example actions are StartBuildBattle, SetDayTime, SetNightTime, WeatherClear, ping, teleport
-if ($Request.Body.action -notmatch '^(StartBuildBattle|SetDayTime|SetNightTime|WeatherClear|ping)$') {
+$AllowedActions = @(
+    "StartBuildBattle", 
+    "SetDayTime", 
+    "SetNightTime", 
+    "WeatherClear", 
+    "ping", 
+    "teleport"
+)
+$RequestAction = $RequestAction.Trim()
+if ($AllowedActions -notcontains $RequestAction) {
     Write-Host "Invalid or missing action in request body."
     $Body = @{
         status = "error"
         message = "Invalid or missing action in request body. / Ugyldig eller manglende handling i anmodningskroppen."
     }
-    
     Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
         StatusCode = [HttpStatusCode]::BadRequest
         Body = $Body
     })
-    
-    # Exit the function early
     return
 }
 
@@ -48,7 +54,7 @@ if ($Request.Body.action -notmatch '^(StartBuildBattle|SetDayTime|SetNightTime|W
 $apiKey = "$($env:pterodactylApikey)"
 $pterodactylApiUrl = "$($env:pterodactylApiUrl)"
 
-if ($Request.Body.action -eq "StartBuildBattle") {
+if ($RequestAction -eq "StartBuildBattle") {
     if (-not $Request.Body.theme) {
         Write-Host "No theme selected, using default Build Battle command"
         $BuildBattleTheme = $false
@@ -130,7 +136,7 @@ if ($Request.Body.action -eq "StartBuildBattle") {
     Write-Host "Mapped command for Build Battle: $($MappedCommand)"
 }
 
-if ($Request.Body.action -eq "teleport") {
+if ($RequestAction -eq "teleport") {
     if (-not $Request.Body.From -or -not $Request.Body.To) {
         Write-Host "No players specified for teleport action."
         $Body = @{
@@ -174,7 +180,7 @@ else {
     }
     
     # Check if the requested action exists in the mapping
-    if (-not $ActionMapping.ContainsKey($Request.Body.action)) {
+    if (-not $ActionMapping.ContainsKey($RequestAction)) {
         $Body = @{
             status = "error"
             message = "Invalid action requested. Action not found in allowed actions. / Ugyldig handling anmodet. Handling ikke fundet i tilladte handlinger."
@@ -190,11 +196,11 @@ else {
     }
     
     else {
-        Write-Host "Action found in mapping: $($Request.Body.action)"
+        Write-Host "Action found in mapping: $($RequestAction)"
     }
     
     # Get the mapped command for the requested action
-    $mappedCommand = $ActionMapping[$Request.Body.action]
+    $mappedCommand = $ActionMapping[$RequestAction]
 }
 
 
