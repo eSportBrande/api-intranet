@@ -131,7 +131,7 @@ if ($Request.Body.action -eq "StartBuildBattle") {
 }
 
 if ($Request.Body.action -eq "teleport") {
-    if (-not $Request.Body.From -and -not $Request.Body.To) {
+    if (-not $Request.Body.From -or -not $Request.Body.To) {
         Write-Host "No players specified for teleport action."
         $Body = @{
             status = "error"
@@ -143,10 +143,13 @@ if ($Request.Body.action -eq "teleport") {
         })
         return
     }
-    if (-is [string] -and $Request.Body.From -match '^[a-zA-Z0-9]+$' -and $Request.Body.To -match '^[a-zA-Z0-9]+$') {
+    if (($Request.Body.From -is [string]) -and ($Request.Body.To -is [string]) -and ($Request.Body.From -match '^[a-zA-Z0-9]+$') -and ($Request.Body.To -match '^[a-zA-Z0-9]+$')) {
         Write-Host "Valid players specified for teleport action."
         $From = $Request.Body.From
         $To = $Request.Body.To
+        # Construct the teleport command
+        $MappedCommand = "tp $($From) $($To)"
+        Write-Host "Mapped command for teleport action: $($MappedCommand)"
     }
     else {
         Write-Host "Invalid player names provided for teleport action."
@@ -160,9 +163,6 @@ if ($Request.Body.action -eq "teleport") {
         })
         return
     }
-    # Construct the teleport command
-    $MappedCommand = "tp $($From) $($To)"
-    Write-Host "Mapped command for teleport action: $($MappedCommand)"
 }
 else {
     # Lets map the command for other actions
