@@ -27,8 +27,8 @@ if ($Request.Body.identifier -notmatch '^[a-zA-Z0-9]{8,16}$') {
     return
 }
 
-# Action must be provided and must be valid: Example actions are StartBuildBattle, SetDayTime, SetNightTime, WeatherClear, ping
-if ($Request.Body.action -notmatch '^(StartBuildBattle|SetDayTime|SetNightTime|WeatherClear|ping)$') {
+# Action must be provided and must be valid: Example actions are StartBuildBattle, SetDayTime, SetNightTime, WeatherClear, ping, teleport
+if ($Request.Body.action -notmatch '^(StartBuildBattle|SetDayTime|SetNightTime|WeatherClear|ping|teleport)$') {
     Write-Host "Invalid or missing action in request body."
     $Body = @{
         status = "error"
