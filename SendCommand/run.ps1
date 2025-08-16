@@ -136,7 +136,7 @@ if ($RequestAction -eq "StartBuildBattle") {
     Write-Host "Mapped command for Build Battle: $($MappedCommand)"
 }
 
-if ($RequestAction -eq "teleport") {
+elseif ($RequestAction -eq "teleport") {
     if (-not $Request.Body.From -or -not $Request.Body.To) {
         Write-Host "No players specified for teleport action."
         $Body = @{
@@ -200,16 +200,16 @@ else {
     }
     
     # Get the mapped command for the requested action
-    $mappedCommand = $ActionMapping[$RequestAction]
+    $MappedCommand = $ActionMapping[$RequestAction]
 }
 
-
+Write-Host "Checking if server ID exists in Pterodactyl."
 $Check = Get-PterodactylServerId -PterodactylApiUrl $pterodactylApiUrl -ApiKey $apiKey -ServerID $Request.Body.identifier
 
 if ($null -ne $Check.attributes) {
     Write-Host "Server ID Exists sending command to server: $($Request.Body.identifier)"
-    Send-DiscordMessage -WebhookUrl $env:DiscordCommandWebhook -Text "Sending command to server: $($Request.Body.identifier) with command: $($mappedCommand)"
-    $Send = Send-PterodactylCommand -PterodactylApiUrl $pterodactylApiUrl -ApiKey $apiKey -ServerID $Request.Body.identifier -Command $mappedCommand
+    Send-DiscordMessage -WebhookUrl $env:DiscordCommandWebhook -Text "Sending command to server: $($Request.Body.identifier) with command: $($MappedCommand)"
+    $Send = Send-PterodactylCommand -PterodactylApiUrl $pterodactylApiUrl -ApiKey $apiKey -ServerID $Request.Body.identifier -Command $MappedCommand
 
     if ($Send -eq 204) {
         $Body = @{
