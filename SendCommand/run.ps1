@@ -29,7 +29,8 @@ if ($Request.Body.identifier -notmatch '^[a-zA-Z0-9]{8,16}$') {
 
 # Action must be provided and must be valid: Example actions are StartBuildBattle, SetDayTime, SetNightTime, WeatherClear, ping, teleport
 $AllowedActions = @(
-    "StartBuildBattle", 
+    "StartBuildBattle",
+    "StopBuildBattle",
     "SetDayTime", 
     "SetNightTime", 
     "WeatherClear", 
@@ -211,6 +212,7 @@ else {
     # Lets map the command for other actions
     $ActionMapping = @{
         "SetDayTime" = "time set day"
+        "StopBuildBattle" = "sudo * /buildbattle leave"
         "SetNightTime" = "time set night"
         "WeatherClear" = "weather clear"
         "ping" = "say hello from API"
