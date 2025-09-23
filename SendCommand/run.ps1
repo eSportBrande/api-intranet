@@ -36,7 +36,8 @@ $AllowedActions = @(
     "WeatherClear", 
     "ping", 
     "teleport",
-    "give"
+    "give",
+    "KillAllMobs"
 )
 $RequestAction = $Request.Body.action.Trim()
 if ($AllowedActions -notcontains $RequestAction) {
@@ -216,6 +217,7 @@ else {
         "SetNightTime" = "time set night"
         "WeatherClear" = "weather clear"
         "ping" = "say hello from API"
+        "KillAllMobs" = "kill @e[type=!player]"
     }
     
     # Check if the requested action exists in the mapping
