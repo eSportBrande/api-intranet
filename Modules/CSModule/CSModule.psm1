@@ -61,6 +61,12 @@ function Get-CSServerDetails {
         $PasswordProtected = $true
         $Password = "$($CSGamePassword)"
     }
+    elseif ($Server.ServerName -match "CS2-PRACC") {
+        $GuideUrl = "$($env:GUIDE_PRACC)"
+        $ServerType = "Practice"
+        $PasswordProtected = $true
+        $Password = "$($CSGamePassword)"
+    }
     else {
         $GuideUrl = $null
         $ServerType = "NOTSET"

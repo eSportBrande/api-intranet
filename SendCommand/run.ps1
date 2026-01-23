@@ -27,7 +27,7 @@ if ($Request.Body.identifier -notmatch '^[a-zA-Z0-9]{8,16}$') {
     return
 }
 
-# Action must be provided and must be valid: Example actions are StartBuildBattle, SetDayTime, SetNightTime, WeatherClear, ping, teleport
+# Action must be provided and must be valid: Example actions are StartBuildBattle, SetDayTime, SetNightTime, WeatherClear, ping, teleport, give, KillAllMobs, CS_StartPracticeMode, CS_StopPracticeMode, CS_StartDryRun, CS_RemoveBots
 $AllowedActions = @(
     "StartBuildBattle",
     "StopBuildBattle",
@@ -37,7 +37,11 @@ $AllowedActions = @(
     "ping", 
     "teleport",
     "give",
-    "KillAllMobs"
+    "KillAllMobs",
+    "CS_StartPracticeMode",
+    "CS_StopPracticeMode",
+    "CS_StartDryRun",
+    "CS_RemoveBots"
 )
 $RequestAction = $Request.Body.action.Trim()
 if ($AllowedActions -notcontains $RequestAction) {
@@ -218,6 +222,10 @@ else {
         "WeatherClear" = "weather clear"
         "ping" = "say hello from API"
         "KillAllMobs" = "kill @e[type=!player]"
+        "CS_StartPracticeMode" = "css_prac"
+        "CS_StopPracticeMode" = "css_match"
+        "CS_StartDryRun" = "css_dryrun"
+        "CS_RemoveBots" = "css_nobots"
     }
     
     # Check if the requested action exists in the mapping
