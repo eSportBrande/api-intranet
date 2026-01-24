@@ -41,7 +41,9 @@ $AllowedActions = @(
     "CS_StartPracticeMode",
     "CS_StopPracticeMode",
     "CS_StartDryRun",
-    "CS_RemoveBots"
+    "CS_RemoveBots",
+    "CS_ChangeWorkshopMap",
+    "CS_ChangeMap"
 )
 $RequestAction = $Request.Body.action.Trim()
 if ($AllowedActions -notcontains $RequestAction) {
@@ -204,6 +206,74 @@ elseif ($RequestAction -eq "give") {
         $Body = @{
             status = "error"
             message = "Invalid player name or item provided for give action. / Ugyldige spillernavne eller genstand angivet til give-handling."
+        }
+        Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+            StatusCode = [HttpStatusCode]::BadRequest
+            Body = $Body
+        })
+        return
+    }
+}
+
+elseif ($RequestAction -eq "CS_ChangeWorkshopMap") {
+    if (-not $Request.Body.workshopId) {
+        Write-Host "No workshop ID specified for CS_ChangeWorkshopMap action."
+        $Body = @{
+            status = "error"
+            message = "No workshop ID specified for CS_ChangeWorkshopMap action. / Intet workshop-ID angivet til CS_ChangeWorkshopMap-handling."
+        }
+        Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+            StatusCode = [HttpStatusCode]::BadRequest
+            Body = $Body
+        })
+        return
+    }
+    if (($Request.Body.workshopId -is [string]) -and ($Request.Body.workshopId -match '^[0-9]+$')) {
+        Write-Host "Valid workshop ID specified for CS_ChangeWorkshopMap action."
+        $workshopId = $Request.Body.workshopId
+        # Construct the workshop map change command
+        $MappedCommand = "host_workshop_map $($workshopId)"
+        Write-Host "Mapped command for CS_ChangeWorkshopMap action: $($MappedCommand)"
+    }
+    else {
+        Write-Host "Invalid workshop ID provided for CS_ChangeWorkshopMap action."
+        $Body = @{
+            status = "error"
+            message = "Invalid workshop ID provided for CS_ChangeWorkshopMap action. Only numeric values are allowed. / Ugyldigt workshop-ID angivet til CS_ChangeWorkshopMap-handling. Kun numeriske værdier er tilladt."
+        }
+        Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+            StatusCode = [HttpStatusCode]::BadRequest
+            Body = $Body
+        })
+        return
+    }
+}
+
+elseif ($RequestAction -eq "CS_ChangeMap") {
+    if (-not $Request.Body.mapName) {
+        Write-Host "No map name specified for CS_ChangeMap action."
+        $Body = @{
+            status = "error"
+            message = "No map name specified for CS_ChangeMap action. / Intet kortnavn angivet til CS_ChangeMap-handling."
+        }
+        Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+            StatusCode = [HttpStatusCode]::BadRequest
+            Body = $Body
+        })
+        return
+    }
+    if (($Request.Body.mapName -is [string]) -and ($Request.Body.mapName -match '^[a-zA-Z0-9_]+$')) {
+        Write-Host "Valid map name specified for CS_ChangeMap action."
+        $mapName = $Request.Body.mapName
+        # Construct the map change command
+        $MappedCommand = "changelevel $($mapName)"
+        Write-Host "Mapped command for CS_ChangeMap action: $($MappedCommand)"
+    }
+    else {
+        Write-Host "Invalid map name provided for CS_ChangeMap action."
+        $Body = @{
+            status = "error"
+            message = "Invalid map name provided for CS_ChangeMap action. Only alphanumeric characters and underscores are allowed. / Ugyldigt kortnavn angivet til CS_ChangeMap-handling. Kun alfanumeriske tegn og understregningstegn er tilladt."
         }
         Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
             StatusCode = [HttpStatusCode]::BadRequest
